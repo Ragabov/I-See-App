@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/current_location_fixed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:weightSum="4"
+        android:clickable="true"
+        android:paddingBottom="25dp"
+        android:backgroundTint="@color/color_primary"
+        android:background="?android:attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_map_marker_radius_grey600_36dp"
+            android:tint="@color/color_accent"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_title_material"
+            android:textColor="@color/primary_text"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="italic"
+            android:text="@string/current_location_text"/>
+
+        </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="1dp"
+        android:background="@color/color_accent"/>
+
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/favourites_header"
+        android:textSize="@dimen/abc_text_size_subhead_material"
+        android:textColor="@color/secondary_text"
+        />
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/favourites_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ></ListView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_favourite_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            app:layout_anchorGravity="bottom|right|end"
+            android:tint="@color/primary_text_light"
+            android:layout_margin="12dp"
+            app:borderWidth="0dp"
+            android:clickable="true"
+            android:src="@drawable/ic_star_black_24dp" />
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

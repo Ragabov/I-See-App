@@ -1,0 +1,55 @@
+<LinearLayout
+    xmlns:font="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/color_primary"
+        android:gravity="left|bottom"
+        android:orientation="vertical"
+        android:weightSum="6"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:src="@drawable/profile_placeholder"/>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="Ahmed Ragab"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/abc_text_size_body_1_material"
+                    android:textColor="@color/primary_text_light"/>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="ahmed_ragab7@hotmail.com"
+                    android:textSize="@dimen/abc_text_size_small_material"
+                    android:textColor="@color/primary_text_light"/>
+    </LinearLayout>
+
+<ListView  android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="3"
+    android:id="@+id/navigation_drawer_list" android:choiceMode="singleChoice"
+    android:divider="@android:color/transparent" android:dividerHeight="0dp"
+    android:paddingTop="8dp"
+    android:background="@color/default_bg_nav_bar" tools:context=".NavigationDrawerFragment" />
+
+</LinearLayout>
