@@ -3,8 +3,8 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="start"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp">
 
     <ImageView
         android:id="@+id/navigation_list_action_icon"
@@ -21,5 +21,5 @@
         android:layout_toRightOf="@id/navigation_list_action_icon"
         android:layout_height="wrap_content"
         android:textColor="#87000000"
-        android:textSize="14sp"/>
+        android:textSize="@dimen/abc_text_size_medium_material"/>
 </RelativeLayout>

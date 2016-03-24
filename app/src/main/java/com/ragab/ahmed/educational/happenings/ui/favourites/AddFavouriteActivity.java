@@ -61,6 +61,11 @@ public class AddFavouriteActivity extends FragmentActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();

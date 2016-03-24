@@ -68,10 +68,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             app:layout_anchorGravity="bottom|right|end"
-            android:tint="@color/primary_text_light"
-            android:layout_margin="12dp"
+            android:layout_margin="15dp"
             app:borderWidth="0dp"
             android:clickable="true"
-            android:src="@drawable/ic_star_black_24dp" />
+            android:src="@android:drawable/ic_menu_add" />
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

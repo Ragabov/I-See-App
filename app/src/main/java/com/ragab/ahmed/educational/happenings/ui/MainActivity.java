@@ -21,10 +21,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.ragab.ahmed.educational.happenings.R;
+import com.ragab.ahmed.educational.happenings.ui.around.AroundFragment;
 import com.ragab.ahmed.educational.happenings.ui.drawer.NavigationDrawerFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.FavouritesFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.map.MainMapFragment;
-import com.ragab.ahmed.educational.happenings.ui.login.LoginActivity;
 
 
 public class MainActivity extends ActionBarActivity
@@ -42,9 +42,15 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
 
     /*
-    Storing the map fragment so as not to make a new instance each time
+    Storing the favourite fragment so as not to make a new instance each time
      */
     private FavouritesFragment favouritesFragment;
+
+    /*
+    Storing the around fragment so as not to make a new instance each time
+     */
+    private AroundFragment aroundFragment;
+
 
     /*
     Google Api Client for retrieving current location info
@@ -62,12 +68,12 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!isLoggedIn)
-        {
-            Intent intent = new Intent();
-            intent.setClass(this.getApplicationContext(), LoginActivity.class);
-            startActivityForResult(intent, 1);
-        }
+//        if (!isLoggedIn)
+//        {
+//            Intent intent = new Intent();
+//            intent.setClass(this.getApplicationContext(), LoginActivity.class);
+//            startActivityForResult(intent, 1);
+//        }
 
 
         setContentView(R.layout.activity_main);
@@ -77,6 +83,7 @@ public class MainActivity extends ActionBarActivity
         mTitle = getTitle();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
         setSupportActionBar(toolbar);
 
@@ -105,8 +112,20 @@ public class MainActivity extends ActionBarActivity
                 {
                     favouritesFragment = new FavouritesFragment();
                 }
+                fragmentManager.popBackStack();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, favouritesFragment)
+                        .commit();
+                break;
+
+            case 1 :
+                if (aroundFragment == null)
+                {
+                    aroundFragment = new AroundFragment();
+                }
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, aroundFragment)
                         .commit();
                 break;
 
@@ -114,7 +133,9 @@ public class MainActivity extends ActionBarActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.container, PlaceholderFragment.newInstance(position))
                     .commit();
+                break;
         }
+
     }
 
     public void openEventsMap (double lat, double lng)
@@ -146,7 +167,6 @@ public class MainActivity extends ActionBarActivity
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
@@ -215,9 +235,8 @@ public class MainActivity extends ActionBarActivity
         }
         else
         {
-            finish();
+
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
