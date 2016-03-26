@@ -25,6 +25,8 @@ import com.ragab.ahmed.educational.happenings.ui.around.AroundFragment;
 import com.ragab.ahmed.educational.happenings.ui.drawer.NavigationDrawerFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.FavouritesFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.map.MainMapFragment;
+import com.ragab.ahmed.educational.happenings.ui.login.LoginActivity;
+import com.ragab.ahmed.educational.happenings.ui.submit.SubmitFragment;
 
 
 public class MainActivity extends ActionBarActivity
@@ -51,6 +53,10 @@ public class MainActivity extends ActionBarActivity
      */
     private AroundFragment aroundFragment;
 
+    /*
+    Storing the around fragment so as not to make a new instance each time
+     */
+    private SubmitFragment submitFragment;
 
     /*
     Google Api Client for retrieving current location info
@@ -60,7 +66,7 @@ public class MainActivity extends ActionBarActivity
     /*
     Check if use is logged in or not
      */
-    boolean isLoggedIn = false;
+    boolean isLoggedIn = true;
 
     Location currentLocation;
 
@@ -68,12 +74,12 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        if (!isLoggedIn)
-//        {
-//            Intent intent = new Intent();
-//            intent.setClass(this.getApplicationContext(), LoginActivity.class);
-//            startActivityForResult(intent, 1);
-//        }
+        if (!isLoggedIn)
+        {
+            Intent intent = new Intent();
+            intent.setClass(this.getApplicationContext(), LoginActivity.class);
+            startActivityForResult(intent, 1);
+        }
 
 
         setContentView(R.layout.activity_main);
@@ -129,6 +135,16 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
 
+            case 2 :
+                if (submitFragment == null)
+                {
+                    submitFragment = new SubmitFragment();
+                }
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, submitFragment)
+                        .commit();
+                break;
             default :
             fragmentManager.beginTransaction()
                     .replace(R.id.container, PlaceholderFragment.newInstance(position))
