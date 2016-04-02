@@ -19,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ragab.ahmed.educational.happenings.R;
+import com.ragab.ahmed.educational.happenings.data.models.User;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -57,6 +59,9 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    private TextView userNameText;
+    private TextView userEmailText;
 
     public NavigationDrawerFragment() {
     }
@@ -101,6 +106,9 @@ public class NavigationDrawerFragment extends Fragment {
         });
         mDrawerListView.setAdapter(new NavigationListViewAdapter(getActivity()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        userNameText = (TextView)view.findViewById(R.id.user_name_text);
+        userEmailText = (TextView)view.findViewById(R.id.user_email_text);
         return view;
     }
 
@@ -244,6 +252,11 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public void setUser(User user)
+    {
+        userNameText.setText(user.fname + " " + user.lname);
+        userEmailText.setText(user.email);
+    }
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.

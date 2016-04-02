@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="true">
 
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
@@ -20,15 +20,17 @@
              in front of the action bar -->
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:minHeight="?attr/actionBarSize"
             android:background="@color/color_primary"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
         <!-- The rest of your content view -->
 
-        <FrameLayout android:id="@+id/container" android:layout_width="match_parent"
+        <FrameLayout android:id="@+id/container"
+            android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </LinearLayout>

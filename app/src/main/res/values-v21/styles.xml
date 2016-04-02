@@ -9,7 +9,6 @@
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primaryDark</item>
         <item name="colorAccent">@color/color_accent</item>
-        <item name="android:colorControlHighlight">@color/color_accent_50</item>
     </style>
 
 </resources>

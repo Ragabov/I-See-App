@@ -1,66 +1,44 @@
 package com.ragab.ahmed.educational.happenings.ui.login;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ragab.ahmed.educational.happenings.R;
+import com.ragab.ahmed.educational.happenings.data.models.User;
+import com.ragab.ahmed.educational.happenings.network.ApiHelper;
+import com.ragab.ahmed.educational.happenings.network.IseeApi;
+import com.ragab.ahmed.educational.happenings.ui.helpers.textwatcher.MyTextWatcher;
+import com.ragab.ahmed.educational.happenings.ui.helpers.textwatcher.Validator;
 
+import java.net.HttpURLConnection;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link com.ragab.ahmed.educational.happenings.ui.login.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SignInFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SignInFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignInFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SignInFragment newInstance(String param1, String param2) {
-        SignInFragment fragment = new SignInFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    EditText emailText;
+    EditText passwordText;
+
+    ProgressDialog mDialog;
+    IseeApi mApi;
+
+    public User mUser;
 
     public SignInFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        mApi = ApiHelper.buildApi();
     }
 
     @Override
@@ -69,8 +47,24 @@ public class SignInFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
 
-        TextView launchSignUp = (TextView)view.findViewById(R.id.link_signup);
+        mDialog = new ProgressDialog(getActivity());
+        mDialog.setIndeterminate(true);
+        mDialog.setMessage(getString(R.string.sign_in_progress));
+        mDialog.setCancelable(false);
 
+        emailText = (EditText)view.findViewById(R.id.input_email);
+        passwordText = (EditText)view.findViewById(R.id.input_password);
+        initValidators();
+
+        AppCompatButton loginBtn = (AppCompatButton)view.findViewById(R.id.btn_login);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
+
+        TextView launchSignUp = (TextView)view.findViewById(R.id.link_signup);
         launchSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,5 +97,59 @@ public class SignInFragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        emailText = null;
+        passwordText = null;
+    }
+
+    public void signIn()
+    {
+
+        if (emailText.getError() != null || passwordText.getError() != null) {
+            emailText.setText(emailText.getText());
+            passwordText.setText(passwordText.getText());
+            return;
+        }
+
+        mDialog.show();
+
+        mApi.signIn(emailText.getText().toString(), passwordText.getText().toString()).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED)
+                {
+                    Toast.makeText(getActivity(), "Invalid email/password combination", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mUser = response.body();
+                    mListener.onFragmentInteraction(OnFragmentInteractionListener.FINISH_SIGN_IN);
+                }
+                mDialog.hide();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                mDialog.hide();
+                Toast.makeText(getActivity(), "Failed to sign in", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void initValidators ()
+    {
+        String emailPrompt = getString(R.string.email_validation);
+        String passwordPrompt = getString(R.string.password_validation);
+
+        emailText.addTextChangedListener(new MyTextWatcher(emailText, new Validator<Boolean, String>(emailPrompt) {
+            @Override
+            public Boolean execute(String s) {
+                return User.isValidEmail(s);
+            }
+        }));
+
+        passwordText.addTextChangedListener(new MyTextWatcher(passwordText, new Validator<Boolean, String>(passwordPrompt) {
+            @Override
+            public Boolean execute(String s) {
+                return User.isValidPassword(s);
+            }
+        }));
     }
 }

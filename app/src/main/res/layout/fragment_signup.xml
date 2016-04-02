@@ -24,22 +24,46 @@
             android:textSize="30dp"
             android:textColor="#ffffffff" />
 
-        <!--  Name Label -->
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-
-            <EditText android:id="@+id/input_name"
-                android:layout_width="match_parent"
+            android:weightSum="2"
+            android:orientation="horizontal">
+            <!--  Name Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:textColor="@color/primary_text_light"
-                android:textColorLink="@color/color_primaryDark"
-                android:textColorHint="@color/color_accent"
-                android:hint="Name" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText android:id="@+id/input_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/primary_text_light"
+                    android:textColorLink="@color/color_primaryDark"
+                    android:textColorHint="@color/color_accent"
+                    android:hint="First name" />
+            </android.support.design.widget.TextInputLayout>
+            <!--  Name Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText android:id="@+id/input_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/primary_text_light"
+                    android:textColorLink="@color/color_primaryDark"
+                    android:textColorHint="@color/color_accent"
+                    android:hint="Last name" />
+            </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
         <!-- Email Label -->
         <android.support.design.widget.TextInputLayout

@@ -21,6 +21,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.ragab.ahmed.educational.happenings.R;
+import com.ragab.ahmed.educational.happenings.data.models.User;
 import com.ragab.ahmed.educational.happenings.ui.around.AroundFragment;
 import com.ragab.ahmed.educational.happenings.ui.drawer.NavigationDrawerFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.FavouritesFragment;
@@ -33,8 +34,13 @@ public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
+    /*
+    Request codes
+     */
+    public static final int PERFORM_LOGIN = 10;
+
     /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.3
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
@@ -66,9 +72,14 @@ public class MainActivity extends ActionBarActivity
     /*
     Check if use is logged in or not
      */
-    boolean isLoggedIn = true;
+    boolean isLoggedIn = false;
 
     Location currentLocation;
+
+    /*
+    The current user object
+     */
+    public User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +89,7 @@ public class MainActivity extends ActionBarActivity
         {
             Intent intent = new Intent();
             intent.setClass(this.getApplicationContext(), LoginActivity.class);
-            startActivityForResult(intent, 1);
+            startActivityForResult(intent, PERFORM_LOGIN);
         }
 
 
@@ -90,7 +101,6 @@ public class MainActivity extends ActionBarActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
-        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
         setSupportActionBar(toolbar);
 
         // Set up the drawer.
@@ -247,7 +257,15 @@ public class MainActivity extends ActionBarActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK)
         {
-            //TODO : Logic
+            switch (requestCode) {
+
+                case PERFORM_LOGIN:
+                    mUser = (User)data.getSerializableExtra(LoginActivity.USER_ARG);
+                    mNavigationDrawerFragment.setUser(mUser);
+                    break;
+                default:
+                    super.onActivityResult(requestCode, resultCode, data);
+            }
         }
         else
         {

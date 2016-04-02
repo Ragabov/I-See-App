@@ -18,31 +18,14 @@
         android:hint="Enter a name for the location"
         android:inputType="textPersonName|textAutoComplete|textShortMessage"
         android:textSize="@dimen/abc_text_size_medium_material"/>
-    <LinearLayout
+
+    <ImageButton
+        android:id="@+id/add_favourite_btn"
+        android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
-        android:weightSum="4"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/add_favourite_btn"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent"
-            android:src="@android:drawable/ic_menu_save"
-            android:background="#99cc00"
-            />
-
-        <ImageButton
-            android:id="@+id/cancel_favourite_btn"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:background="#ff4444"
-            />
-
-        </LinearLayout>
+        android:src="@android:drawable/ic_menu_save"
+        android:background="@color/color_accent"
+        />
 
 </LinearLayout>

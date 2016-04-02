@@ -18,6 +18,8 @@ package com.ragab.ahmed.educational.happenings.ui.login;
 public interface OnFragmentInteractionListener {
     static final int LAUNCH_SIGN_UP = 1;
     static final int LAUNCH_SIGN_IN = 2;
+    static final int FINISH_SIGN_UP = 3;
+    static final int FINISH_SIGN_IN = 4;
     // TODO: Update argument type and name
     public void onFragmentInteraction(int REQUEST_CODE);
 }

@@ -50,13 +50,6 @@ public class AddFavouriteActivity extends FragmentActivity {
                 finish();
             }
         });
-        ((ImageButton)this.findViewById(R.id.cancel_favourite_btn)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
         setUpMapIfNeeded();
     }
 

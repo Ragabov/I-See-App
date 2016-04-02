@@ -22,8 +22,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="30dp"
-                app:civ_border_width="2dp"
-                app:civ_border_color="@color/secondary_text"
+                app:civ_border_color="@color/color_accent"
                 android:src="@drawable/profile_placeholder"/>
 
                 <TextView
