@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onFragmentInteraction(int REQUEST_CODE) {
-        if (REQUEST_CODE == OnFragmentInteractionListener.LAUNCH_SIGN_IN) {
+        if (REQUEST_CODE == OnFragmentInteractionListener.LAUNCH_SIGN_IN ) {
             if (signInFragment == null)
                 signInFragment = new SignInFragment();
 
@@ -52,6 +52,17 @@ public class LoginActivity extends AppCompatActivity implements
             intent.putExtra(USER_ARG, signInFragment.mUser);
             setResult(RESULT_OK, intent);
             finish();
+        }
+        else if (REQUEST_CODE == OnFragmentInteractionListener.FINISH_SIGN_UP)
+        {
+            if (signInFragment == null)
+                signInFragment = new SignInFragment();
+
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                    .replace(R.id.container, signInFragment)
+                    .commit();
+
         }
     }
 }

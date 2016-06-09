@@ -75,13 +75,6 @@ public class SignInFragment extends android.support.v4.app.Fragment {
         return view;
     }
 
-/*    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -97,27 +90,27 @@ public class SignInFragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        emailText = null;
-        passwordText = null;
     }
 
     public void signIn()
     {
-
+        emailText.setText(emailText.getText().toString().trim());
+        passwordText.setText(passwordText.getText().toString().trim());
         if (emailText.getError() != null || passwordText.getError() != null) {
-            emailText.setText(emailText.getText());
-            passwordText.setText(passwordText.getText());
             return;
         }
 
         mDialog.show();
+
+        final String invalidPrompt = getString(R.string.sign_in_invalid);
+        final String failedPrompt = getString(R.string.sign_in_failed);
 
         mApi.signIn(emailText.getText().toString(), passwordText.getText().toString()).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED)
                 {
-                    Toast.makeText(getActivity(), "Invalid email/password combination", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), invalidPrompt, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mUser = response.body();
@@ -129,7 +122,7 @@ public class SignInFragment extends android.support.v4.app.Fragment {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 mDialog.hide();
-                Toast.makeText(getActivity(), "Failed to sign in", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), failedPrompt, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -152,4 +145,5 @@ public class SignInFragment extends android.support.v4.app.Fragment {
             }
         }));
     }
+
 }

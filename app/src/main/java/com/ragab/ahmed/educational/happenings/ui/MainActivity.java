@@ -80,18 +80,19 @@ public class MainActivity extends ActionBarActivity
     The current user object
      */
     public User mUser;
+    /*
+    save instance bundle keys
+     */
+    String STATE_USER = "user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!isLoggedIn)
-        {
-            Intent intent = new Intent();
-            intent.setClass(this.getApplicationContext(), LoginActivity.class);
-            startActivityForResult(intent, PERFORM_LOGIN);
+        //Restore state
+        if (savedInstanceState != null) {
+            mUser = (User) savedInstanceState.getSerializable(STATE_USER);
         }
-
 
         setContentView(R.layout.activity_main);
 
@@ -114,6 +115,17 @@ public class MainActivity extends ActionBarActivity
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mUser == null)
+        {
+            Intent intent = new Intent();
+            intent.setClass(this.getApplicationContext(), LoginActivity.class);
+            startActivityForResult(intent, PERFORM_LOGIN);
         }
     }
 
@@ -155,11 +167,6 @@ public class MainActivity extends ActionBarActivity
                         .replace(R.id.container, submitFragment)
                         .commit();
                 break;
-            default :
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderFragment.newInstance(position))
-                    .commit();
-                break;
         }
 
     }
@@ -179,7 +186,7 @@ public class MainActivity extends ActionBarActivity
                 lng = 0;
             }
         }
-        MainMapFragment mapFragment = MainMapFragment.newInstance(lat,lng);
+        MainMapFragment mapFragment = MainMapFragment.newInstance(lat, lng);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, mapFragment)
                 .addToBackStack(null)
@@ -218,10 +225,6 @@ public class MainActivity extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -261,6 +264,8 @@ public class MainActivity extends ActionBarActivity
 
                 case PERFORM_LOGIN:
                     mUser = (User)data.getSerializableExtra(LoginActivity.USER_ARG);
+                    if (mUser == null)
+                        break;
                     mNavigationDrawerFragment.setUser(mUser);
                     break;
                 default:
@@ -269,57 +274,19 @@ public class MainActivity extends ActionBarActivity
         }
         else
         {
-
+            if (requestCode == PERFORM_LOGIN)
+            {
+                //Failed to login
+                finish();
+                System.exit(0);
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(STATE_USER, mUser);
+        super.onSaveInstanceState(outState);
     }
 }

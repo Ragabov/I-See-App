@@ -1,12 +1,14 @@
 package com.ragab.ahmed.educational.happenings.ui.favourites;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +70,38 @@ public class FavouritesFragment extends Fragment {
                 mainActivity.openEventsMap(lat, lng);
             }
         });
+
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        mainActivity);
+                alert.setMessage(mainActivity.getResources().getString(R.string.delete_location_dialog_message));
+                alert.setPositiveButton(mainActivity.getResources().getString(R.string.delete_positive_text), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sharedPreferences.edit().remove(favourites_array.getItem(position)).commit();
+                        favourites_array.remove(favourites_array.getItem(position));
+                        dialog.dismiss();
+
+                    }
+                });
+                alert.setNegativeButton(mainActivity.getResources().getString(R.string.delete_negative_text), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
+            }
+        });
+
         listview.setAdapter(favourites_array);
 
 
