@@ -1,9 +1,12 @@
 package com.ragab.ahmed.educational.happenings.data.models;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 /**
  * Created by Ragabov on 3/24/2016.
  */
-public class Event {
+public class Event implements ClusterItem {
 
     public int id;
     public String name;
@@ -33,5 +36,10 @@ public class Event {
         this.date = date;
         this.userName = userName;
         this.id = id;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(latitude, longitude);
     }
 }

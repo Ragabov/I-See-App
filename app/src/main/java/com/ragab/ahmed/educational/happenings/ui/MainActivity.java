@@ -4,17 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,7 +22,7 @@ import com.ragab.ahmed.educational.happenings.ui.around.AroundFragment;
 import com.ragab.ahmed.educational.happenings.ui.around.Map.AroundMapFragment;
 import com.ragab.ahmed.educational.happenings.ui.drawer.NavigationDrawerFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.FavouritesFragment;
-import com.ragab.ahmed.educational.happenings.ui.favourites.map.MainMapFragment;
+import com.ragab.ahmed.educational.happenings.ui.map.MainMapFragment;
 import com.ragab.ahmed.educational.happenings.ui.login.LoginActivity;
 import com.ragab.ahmed.educational.happenings.ui.submit.SubmitFragment;
 
@@ -122,7 +118,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (mUser == null)
+        if (mUser != null)
         {
             Intent intent = new Intent();
             intent.setClass(this.getApplicationContext(), LoginActivity.class);
@@ -194,9 +190,9 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-    public void openEventSubmitMap (double lat, double lng)
+    public void openEventSubmitMap (double lat, double lng, String title)
     {
-        AroundMapFragment mapFragment = AroundMapFragment.newInstance(lat, lng);
+        AroundMapFragment mapFragment = AroundMapFragment.newInstance(lat, lng, title);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, mapFragment)
                 .addToBackStack(null)

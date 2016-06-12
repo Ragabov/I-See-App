@@ -100,7 +100,7 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
         holder.showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.openEventSubmitMap(mDataset[position].latitude, mDataset[position].longitude);
+                mainActivity.openEventSubmitMap(mDataset[position].latitude, mDataset[position].longitude, mDataset[position].name);
             }
         });
         holder.confirmBtn.setOnClickListener(new View.OnClickListener() {
