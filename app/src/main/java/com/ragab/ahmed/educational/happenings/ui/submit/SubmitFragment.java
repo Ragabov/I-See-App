@@ -3,6 +3,7 @@ package com.ragab.ahmed.educational.happenings.ui.submit;
 
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -76,6 +77,7 @@ public class SubmitFragment extends Fragment {
     CheckBox isAnonymous;
     private ImageButton addImageButton;
 
+    ProgressDialog mDialog ;
     IseeApi mApi;
 
     public SubmitFragment() {
@@ -88,6 +90,11 @@ public class SubmitFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_submit, container, false);
+
+        mDialog = new ProgressDialog(getActivity());
+        mDialog.setIndeterminate(true);
+        mDialog.setMessage(getString(R.string.submit_event_progress));
+        mDialog.setCancelable(false);
 
         eventName = (EditText) view.findViewById(R.id.event_name_txt);
         eventDescribtion = (EditText) view.findViewById(R.id.event_description_txt);
@@ -133,6 +140,8 @@ public class SubmitFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                mDialog.show();
+
                 String name = eventName.getText().toString().trim();
                 String description = eventDescribtion.getText().toString().trim();
                 boolean anonymous = isAnonymous.isChecked();
@@ -144,7 +153,7 @@ public class SubmitFragment extends Fragment {
                 Uri tempUri = getImageUri(mainActivity.getApplicationContext(), bitmap);
 
                 // CALL THIS METHOD TO GET THE ACTUAL PATH
-                File finalFile = new File(getRealPathFromURI(tempUri));
+                final File finalFile = new File(getRealPathFromURI(tempUri));
                 MediaType mediaType = MediaType.parse("image/*");
                 RequestBody requestBody = RequestBody.create(mediaType, finalFile);
                 MultipartBody.Part part = MultipartBody.Part.createFormData("event_pic", finalFile.getName(), requestBody);
@@ -154,16 +163,21 @@ public class SubmitFragment extends Fragment {
                         typeSpinner.getSelectedItemPosition(), anonymous, user.id, part).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Toast.makeText(getActivity(), location.toString(), Toast.LENGTH_LONG).show();
-                        Scanner json = new Scanner(response.body().byteStream());
-                        String str = "";
-                        while (json.hasNext())
-                            str += json.nextLine();
+                        if (response.code() == 201) {
+                            Toast.makeText(getActivity(), getString(R.string.submit_event_success), Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(getActivity(), getString(R.string.submit_event_failure), Toast.LENGTH_LONG).show();
+                        }
+                        finalFile.delete();
+                        mDialog.hide();
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                        Toast.makeText(getActivity(), getString(R.string.submit_event_failure), Toast.LENGTH_LONG).show();
+                        mDialog.hide();
                     }
                 });
             }
@@ -276,7 +290,6 @@ public class SubmitFragment extends Fragment {
         // "RECREATE" THE NEW BITMAP
         Bitmap resizedBitmap = Bitmap.createBitmap(
                 bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
         return resizedBitmap;
     }
 

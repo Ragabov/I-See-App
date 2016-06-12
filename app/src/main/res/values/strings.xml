@@ -55,7 +55,21 @@
 
     <string name="delete_positive_text">Yes</string>
     <string name="delete_negative_text">Cancel</string>
-    <string name="delete_location_dialog_message">Are you sure you want to delete this location</string>
+    <string name="delete_location_dialog_message">Are you sure you want to delete this location?</string>
+
+    <string name="submit_event_progress">Submitting event...</string>
+    <string name="submit_event_success">Event submitted successfully</string>
+    <string name="submit_event_failure">An error has occured, couldn\'t submit event</string>
+
+    <string name="confirm_event_progress">Confirming event</string>
+    <string name="confirm_event_success">Event confirmed successfully </string>
+    <string name="confirm_event_failure">An error has occured, couldn\'t confirm event </string>
+    <string name="confirm_event_dialog_message">Are you sure you want to confirm this event?</string>
+
+    <string name="disconfirm_event_progress">Disconfirming event</string>
+    <string name="disconfirm_event_success">Event disconfimed successfully </string>
+    <string name="disconfirm_event_failure">An error has occured, couldn\'t disconfirm event </string>
+    <string name="disconfirm_event_dialog_message">Are you sure you want to disconfirm this event?</string>
 
     <string-array name="image_dialog_picker_items">
         <item>@string/image_from_camera</item>

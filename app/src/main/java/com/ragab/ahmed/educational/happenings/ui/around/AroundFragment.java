@@ -49,7 +49,7 @@ public class AroundFragment extends  Fragment{
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         eventsCards.setLayoutManager(layoutManager);
 
-        AroundAdapter adapter = new AroundAdapter(fillEvents());
+        AroundAdapter adapter = new AroundAdapter(fillEvents(), getActivity());
         eventsCards.setAdapter(adapter);
 
         return view;
@@ -75,15 +75,15 @@ public class AroundFragment extends  Fragment{
 
     public Event[] fillEvents()
     {
-        Event[] events = {new Event("A Huge fire", "Some first just happened and it's bal bla abab", "10 minutes ago", "John Doe"),
-                new Event("A Tremendous fire", "Some first just happened and it's bal bla abab", "1 hour ago", "Dwight Schrute"),
-                new Event("A Huge fire", "Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab ", "10 minutes ago", "John Doe"),
-                new Event("A Huge fire", "Some first just happened and it's bal bla abab", "20 minutes ago", "James Pam"),
-                new Event("A Magnificient fire", "Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab ", "Now", "John Doe"),
-                new Event("A Huge fire", "Some first just happened and it's bal bla abab", "10 minutes ago", "John Doe"),
-                new Event("An EVENT EVENT", "Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab ", "10 minutes ago", "John Doe"),
-                new Event("A Marvelous thing", "Some first just happened and it's bal bla abab", "10 minutes ago", "Ahmed Ragab"),
-                new Event("A Huge fire", "Some first just happened and it's bal bla abab", "seconds ago", "Mostafa Mohammed")};
+        Event[] events = {new Event("A Huge fire", "Some first just happened and it's bal bla abab", "10 minutes ago", "John Doe", 102.1, 20.3),
+                new Event("A Tremendous fire", "Some first just happened and it's bal bla abab", "1 hour ago", "Dwight Schrute", 102.1, 20.3),
+                new Event("A Huge fire", "Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab ", "10 minutes ago", "John Doe", 28, 30),
+                new Event("A Huge fire", "Some first just happened and it's bal bla abab", "20 minutes ago", "James Pam", 102.1, 20.3),
+                new Event("A Magnificient fire", "Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab ", "Now", "John Doe", 102.1, 30.3),
+                new Event("A Huge fire", "Some first just happened and it's bal bla abab", "10 minutes ago", "John Doe", 120.1, 20.3),
+                new Event("An EVENT EVENT", "Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab Some first just happened and it's bal bla abab ", "10 minutes ago", "John Doe", 102.1, 50.3),
+                new Event("A Marvelous thing", "Some first just happened and it's bal bla abab", "10 minutes ago", "Ahmed Ragab", 102.1, 20.3),
+                new Event("A Huge fire", "Some first just happened and it's bal bla abab", "seconds ago", "Mostafa Mohammed", 102.1, 20.3)};
 
         return events;
     }

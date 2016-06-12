@@ -23,6 +23,7 @@ import com.google.android.gms.location.LocationServices;
 import com.ragab.ahmed.educational.happenings.R;
 import com.ragab.ahmed.educational.happenings.data.models.User;
 import com.ragab.ahmed.educational.happenings.ui.around.AroundFragment;
+import com.ragab.ahmed.educational.happenings.ui.around.Map.AroundMapFragment;
 import com.ragab.ahmed.educational.happenings.ui.drawer.NavigationDrawerFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.FavouritesFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.map.MainMapFragment;
@@ -187,6 +188,15 @@ public class MainActivity extends ActionBarActivity
             }
         }
         MainMapFragment mapFragment = MainMapFragment.newInstance(lat, lng);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, mapFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void openEventSubmitMap (double lat, double lng)
+    {
+        AroundMapFragment mapFragment = AroundMapFragment.newInstance(lat, lng);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, mapFragment)
                 .addToBackStack(null)

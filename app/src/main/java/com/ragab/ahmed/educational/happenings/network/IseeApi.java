@@ -36,4 +36,13 @@ Call<ResponseBody> submitEvent(@Part("event_name") String eventName,
                        @Part("anonymous") boolean isAnonymous,
                        @Part("user_id") long id,
                        @Part MultipartBody.Part  image);
+
+@FormUrlEncoded
+@POST(ApiHelper.EVENT_ENDPOINT + "/confirm")
+Call<ResponseBody> confirmEvent(@Field("user_id") long userId, @Field("event_id") long eventId);
+
+@FormUrlEncoded
+@POST(ApiHelper.EVENT_ENDPOINT + "/disconfirm")
+Call<ResponseBody> disconfirmEvent(@Field("user_id") long userId, @Field("event_id") long eventId);
 }
+
