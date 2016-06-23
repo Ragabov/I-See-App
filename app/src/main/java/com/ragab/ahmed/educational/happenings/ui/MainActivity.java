@@ -17,19 +17,27 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.ragab.ahmed.educational.happenings.R;
+import com.ragab.ahmed.educational.happenings.data.models.Event;
 import com.ragab.ahmed.educational.happenings.data.models.User;
+import com.ragab.ahmed.educational.happenings.network.ApiHelper;
+import com.ragab.ahmed.educational.happenings.network.IseeApi;
 import com.ragab.ahmed.educational.happenings.ui.around.AroundFragment;
 import com.ragab.ahmed.educational.happenings.ui.around.Map.AroundMapFragment;
 import com.ragab.ahmed.educational.happenings.ui.drawer.NavigationDrawerFragment;
 import com.ragab.ahmed.educational.happenings.ui.favourites.FavouritesFragment;
 import com.ragab.ahmed.educational.happenings.ui.map.MainMapFragment;
 import com.ragab.ahmed.educational.happenings.ui.login.LoginActivity;
+import com.ragab.ahmed.educational.happenings.ui.profile.ProfileFragment;
 import com.ragab.ahmed.educational.happenings.ui.submit.SubmitFragment;
+import com.ragab.ahmed.educational.happenings.ui.utility.DateReciever;
+
+import java.util.Calendar;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        DateReciever{
 
     /*
     Request codes
@@ -39,6 +47,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.3
      */
+    private String NAV_FRAGMENT_KEY = "navf";
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     /**
@@ -49,17 +58,27 @@ public class MainActivity extends ActionBarActivity
     /*
     Storing the favourite fragment so as not to make a new instance each time
      */
+    private String FAV_FRAGMENT_KEY = "favf";
     private FavouritesFragment favouritesFragment;
 
     /*
     Storing the around fragment so as not to make a new instance each time
      */
+    private String AROUND_FRAGMENT_KEY = "aroundf";
     private AroundFragment aroundFragment;
 
     /*
     Storing the around fragment so as not to make a new instance each time
      */
+    private String SUBMIT_FRAGMENT_KEY = "submitf";
     private SubmitFragment submitFragment;
+
+    private ProfileFragment profileFragment;
+    private String PROFILE_FRAGMENT_KEY = "profilef";
+    /*
+Storing the around fragment so as not to make a new instance each time
+ */
+    private MainMapFragment mapFragment;
 
     /*
     Google Api Client for retrieving current location info
@@ -71,6 +90,10 @@ public class MainActivity extends ActionBarActivity
      */
     boolean isLoggedIn = false;
 
+    /*
+    Current Fragment Key
+     */
+    private String currentFragmentKey;
     Location currentLocation;
 
     /*
@@ -84,11 +107,19 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Event.historySubmit = getString(R.string.history_submit_format);
+        Event.historyConfirm = getString(R.string.history_confirm_format);
+        Event.historyDisConfirm = getString(R.string.history_disconfirm_format);
         super.onCreate(savedInstanceState);
 
         //Restore state
         if (savedInstanceState != null) {
             mUser = (User) savedInstanceState.getSerializable(STATE_USER);
+            favouritesFragment = (FavouritesFragment) getSupportFragmentManager().getFragment(savedInstanceState, FAV_FRAGMENT_KEY);
+            submitFragment = (SubmitFragment) getSupportFragmentManager().getFragment(savedInstanceState, SUBMIT_FRAGMENT_KEY);
+            aroundFragment = (AroundFragment) getSupportFragmentManager().getFragment(savedInstanceState, AROUND_FRAGMENT_KEY);
+            profileFragment = (ProfileFragment) getSupportFragmentManager().getFragment(savedInstanceState, PROFILE_FRAGMENT_KEY);
+            mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().getFragment(savedInstanceState, NAV_FRAGMENT_KEY);
         }
 
         setContentView(R.layout.activity_main);
@@ -118,7 +149,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (mUser != null)
+        if (mUser == null)
         {
             Intent intent = new Intent();
             intent.setClass(this.getApplicationContext(), LoginActivity.class);
@@ -141,6 +172,7 @@ public class MainActivity extends ActionBarActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, favouritesFragment)
                         .commit();
+                currentFragmentKey = FAV_FRAGMENT_KEY;
                 break;
 
             case 1 :
@@ -152,6 +184,7 @@ public class MainActivity extends ActionBarActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, aroundFragment)
                         .commit();
+                currentFragmentKey = AROUND_FRAGMENT_KEY;
                 break;
 
             case 2 :
@@ -163,6 +196,18 @@ public class MainActivity extends ActionBarActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, submitFragment)
                         .commit();
+                currentFragmentKey = SUBMIT_FRAGMENT_KEY;
+                break;
+            case 3:
+                if (profileFragment == null)
+                {
+                    profileFragment = new ProfileFragment();
+                }
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, profileFragment)
+                        .commit();
+                currentFragmentKey = PROFILE_FRAGMENT_KEY;
                 break;
         }
 
@@ -183,7 +228,7 @@ public class MainActivity extends ActionBarActivity
                 lng = 0;
             }
         }
-        MainMapFragment mapFragment = MainMapFragment.newInstance(lat, lng);
+        mapFragment = MainMapFragment.newInstance(lat, lng);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, mapFragment)
                 .addToBackStack(null)
@@ -272,7 +317,11 @@ public class MainActivity extends ActionBarActivity
                     mUser = (User)data.getSerializableExtra(LoginActivity.USER_ARG);
                     if (mUser == null)
                         break;
+                    if (mUser.picPath != null)
+                        mUser.picPath = ApiHelper.BASE_IMAGE_URL + mUser.picPath;
                     mNavigationDrawerFragment.setUser(mUser);
+                    mNavigationDrawerFragment.updateProfilePicture(mUser.picPath);
+                    favouritesFragment.loadFavorites();
                     break;
                 default:
                     super.onActivityResult(requestCode, resultCode, data);
@@ -293,6 +342,37 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(STATE_USER, mUser);
+
+        if (currentFragmentKey == FAV_FRAGMENT_KEY)
+            getSupportFragmentManager().putFragment(outState, FAV_FRAGMENT_KEY, favouritesFragment);
+        else if (currentFragmentKey == AROUND_FRAGMENT_KEY)
+            getSupportFragmentManager().putFragment(outState, AROUND_FRAGMENT_KEY, aroundFragment);
+        else if (currentFragmentKey == SUBMIT_FRAGMENT_KEY)
+            getSupportFragmentManager().putFragment(outState, SUBMIT_FRAGMENT_KEY, submitFragment);
+        else if (currentFragmentKey == PROFILE_FRAGMENT_KEY)
+            getSupportFragmentManager().putFragment(outState, PROFILE_FRAGMENT_KEY, profileFragment);
+
+        if (mNavigationDrawerFragment != null)
+            getSupportFragmentManager().putFragment(outState, NAV_FRAGMENT_KEY, mNavigationDrawerFragment);
+
+
         super.onSaveInstanceState(outState);
+    }
+    @Override
+    public void getSelectedDate(Calendar date) {
+        if (mapFragment != null)
+        {
+            if (mapFragment.isStartDate)
+                mapFragment.startDate = date.getTimeInMillis();
+            else
+                mapFragment.endDate = date.getTimeInMillis();
+
+            mapFragment.loadEvents(mapFragment.currentBounds);
+        }
+    }
+
+    public void updateNavProfilePicture (String filePath)
+    {
+        mNavigationDrawerFragment.updateProfilePicture(filePath);
     }
 }

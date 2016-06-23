@@ -11,7 +11,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
 
     <application
         android:allowBackup="true"
@@ -46,6 +48,11 @@
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
+        <service android:name=".network.around.AroundIntentService" />
+        <receiver
+            android:name=".network.around.AroundAlarmReciever"
+            android:process=":remote" >
+        </receiver>
     </application>
 
 </manifest>

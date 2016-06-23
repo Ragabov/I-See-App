@@ -28,10 +28,11 @@ public class NavigationListViewAdapter extends BaseAdapter{
         minflater = LayoutInflater.from(context);
         Resources resources = context.getResources();
         titles = resources.getStringArray(R.array.navigation_titles);
-        icons = new Drawable[3];
+        icons = new Drawable[4];
         icons[0] = resources.getDrawable(R.drawable.ic_map_black_24dp);
         icons[1] = resources.getDrawable(R.drawable.ic_whatshot_black_24dp);
         icons[2] = resources.getDrawable(R.drawable.ic_edit_location_black_24dp);
+        icons[3] = resources.getDrawable(R.drawable.ic_account_circle_black_24dp);
         selectedColor = resources.getColor(R.color.color_accent);
         defaultColor = resources.getColor(R.color.default_nav_bar);
         defaultIconColor = Color.parseColor("#87FFFFFF");
@@ -39,7 +40,7 @@ public class NavigationListViewAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override

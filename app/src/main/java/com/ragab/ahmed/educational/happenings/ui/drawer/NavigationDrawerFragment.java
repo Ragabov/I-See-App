@@ -23,6 +23,9 @@ import android.widget.TextView;
 
 import com.ragab.ahmed.educational.happenings.R;
 import com.ragab.ahmed.educational.happenings.data.models.User;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -56,10 +59,12 @@ public class NavigationDrawerFragment extends Fragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 
+    private String imagePath = null;
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private CircleImageView profileImage;
     private TextView userNameText;
     private TextView userEmailText;
 
@@ -107,8 +112,11 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setAdapter(new NavigationListViewAdapter(getActivity()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
+        profileImage = (CircleImageView) view.findViewById(R.id.user_profile_photo);
         userNameText = (TextView)view.findViewById(R.id.user_name_text);
         userEmailText = (TextView)view.findViewById(R.id.user_email_text);
+
+        updateProfilePicture(imagePath);
         return view;
     }
 
@@ -280,5 +288,16 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    public void updateProfilePicture (String filePath)
+    {
+        imagePath = filePath;
+        if (profileImage != null && filePath != null)
+        Picasso.with(getActivity())
+                .load(filePath)
+                .resize(profileImage.getWidth(), profileImage.getHeight())
+                .centerCrop()
+                .into(profileImage);
     }
 }

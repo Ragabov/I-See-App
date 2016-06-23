@@ -33,16 +33,16 @@ public class LocationHelper implements GoogleApiClient.ConnectionCallbacks,
 
     private final int DISPLACEMENT_TOLERANCE = 100 ;
     private long updateTimeInterval;
-
+    private com.google.android.gms.location.LocationListener locationListener;
     private GoogleApiClient mGoogleApiClient;
 
-    private Activity mContext;
+    private Context mContext;
 
     private Location mCurrentLocation;
 
     private LocationRequest mLocationRequest;
 
-    public LocationHelper(Activity context, long updateInterval)
+    public LocationHelper(Context context, long updateInterval, com.google.android.gms.location.LocationListener locationListener)
     {
         updateTimeInterval = updateInterval;
         mContext = context;
@@ -55,8 +55,10 @@ public class LocationHelper implements GoogleApiClient.ConnectionCallbacks,
         }
         mLocationRequest = new LocationRequest();
 
-        if (updateInterval > 0)
+        if (updateInterval > 0) {
             mLocationRequest.setInterval(updateInterval);
+            this.locationListener = locationListener;
+        }
 
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT_TOLERANCE);
@@ -94,10 +96,14 @@ public class LocationHelper implements GoogleApiClient.ConnectionCallbacks,
                         try {
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
+                            Activity activity = (Activity) mContext;
                             status.startResolutionForResult(
-                                    mContext,
+                                    activity,
                                     REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
+                        } catch (ClassCastException ex) {
+                            // ignore
+                        }
+                        catch (IntentSender.SendIntentException e) {
                             // Ignore the error.
                         }
                         break;
@@ -124,6 +130,7 @@ public class LocationHelper implements GoogleApiClient.ConnectionCallbacks,
     @Override
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
+        locationListener.onLocationChanged(mCurrentLocation);
     }
 
     public Location getCurrentLocation()

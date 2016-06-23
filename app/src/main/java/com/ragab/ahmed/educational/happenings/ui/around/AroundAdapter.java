@@ -19,6 +19,7 @@ import com.ragab.ahmed.educational.happenings.network.IseeApi;
 import com.ragab.ahmed.educational.happenings.ui.MainActivity;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
@@ -31,7 +32,7 @@ import retrofit2.Response;
  */
 public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder> {
 
-    private Event[] mDataset;
+    private ArrayList<Event> mDataset;
     IseeApi mApi;
     private MainActivity mainActivity;
     ProgressDialog mDialog;
@@ -65,7 +66,7 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AroundAdapter(Event[] myDataset, Activity activity) {
+    public AroundAdapter(ArrayList<Event> myDataset, Activity activity) {
         mDataset = myDataset;
         this.mainActivity = (MainActivity) activity;
         mApi = ApiHelper.buildApi();
@@ -92,15 +93,15 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        holder.userTextView.setText(mDataset[position].userName);
-        holder.descriptionTextView.setText(mDataset[position].description);
-        holder.nameTextView.setText(mDataset[position].name);
-        holder.timeTextView.setText(mDataset[position].date);
+        holder.userTextView.setText(mDataset.get(position).userName);
+        holder.descriptionTextView.setText(mDataset.get(position).description);
+        holder.nameTextView.setText(mDataset.get(position).name);
+        holder.timeTextView.setText(mDataset.get(position).date);
 
         holder.showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.openEventSubmitMap(mDataset[position].latitude, mDataset[position].longitude, mDataset[position].name);
+                mainActivity.openEventSubmitMap(mDataset.get(position).lattitude, mDataset.get(position).longitude, mDataset.get(position).name);
             }
         });
         holder.confirmBtn.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +116,7 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
                     public void onClick(DialogInterface dialog, int which) {
                         mDialog.setMessage(mainActivity.getString(R.string.confirm_event_progress));
                         mDialog.show();
-                        mApi.confirmEvent(mainActivity.mUser.id, mDataset[position].id).enqueue(new Callback<ResponseBody>() {
+                        mApi.confirmEvent(mainActivity.mUser.id, mDataset.get(position).id).enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 if (response.code() == HttpURLConnection.HTTP_OK)
@@ -164,7 +165,7 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
                     public void onClick(DialogInterface dialog, int which) {
                         mDialog.setMessage(mainActivity.getString(R.string.disconfirm_event_progress));
                         mDialog.show();
-                        mApi.disconfirmEvent(mainActivity.mUser.id, mDataset[position].id).enqueue(new Callback<ResponseBody>() {
+                        mApi.disconfirmEvent(mainActivity.mUser.id, mDataset.get(position).id).enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 if (response.code() == HttpURLConnection.HTTP_OK)
@@ -202,9 +203,20 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
 
     }
 
+    public void addItems (ArrayList<Event> items)
+    {
+        mDataset.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void clearItems ()
+    {
+        mDataset.clear();;
+        notifyDataSetChanged();
+    }
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
     }
 }

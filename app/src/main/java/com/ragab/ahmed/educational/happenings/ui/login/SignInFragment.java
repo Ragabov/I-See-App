@@ -2,8 +2,11 @@ package com.ragab.ahmed.educational.happenings.ui.login;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +57,10 @@ public class SignInFragment extends android.support.v4.app.Fragment {
 
         emailText = (EditText)view.findViewById(R.id.input_email);
         passwordText = (EditText)view.findViewById(R.id.input_password);
-        initValidators();
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.LOGIN_FILE, Context.MODE_PRIVATE);
+        emailText.setText(sharedPreferences.getString(LoginActivity.USER_NAME_EMAIL, ""));
+        passwordText.setText(sharedPreferences.getString(LoginActivity.USER_PASSWORD_KEY, ""));
 
         AppCompatButton loginBtn = (AppCompatButton)view.findViewById(R.id.btn_login);
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +78,10 @@ public class SignInFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        if (sharedPreferences.getString(LoginActivity.USER_NAME_EMAIL, null) != null)
+        {
+            loginBtn.performClick();
+        }
         return view;
     }
 
@@ -112,6 +122,10 @@ public class SignInFragment extends android.support.v4.app.Fragment {
                 {
                     Toast.makeText(getActivity(), invalidPrompt, Toast.LENGTH_SHORT).show();
                 }
+                else if (response.body() == null)
+                {
+                    this.onFailure(call, null);
+                }
                 else {
                     mUser = response.body();
                     mListener.onFragmentInteraction(OnFragmentInteractionListener.FINISH_SIGN_IN);
@@ -145,5 +159,4 @@ public class SignInFragment extends android.support.v4.app.Fragment {
             }
         }));
     }
-
 }

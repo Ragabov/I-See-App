@@ -11,7 +11,12 @@ public class ApiHelper {
 
     private ApiHelper (){}
 
-    public static final String BASE_URL = "http://172.31.249.32/index.php/IseeAPI/"; //192.168.101.1
+    public static final String SERVER_IP = "http://192.168.9.100/";
+
+
+    public static final String BASE_URL = SERVER_IP + "index.php/IseeAPI/"; //172.31.249.32
+    public static final String BASE_IMAGE_URL = SERVER_IP + "application/savefiles/";
+
 
     public static final String USER_ENDPOINT = "User";
     public static final String EVENT_ENDPOINT = "Event";

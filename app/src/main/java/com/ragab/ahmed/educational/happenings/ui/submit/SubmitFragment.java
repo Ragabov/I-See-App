@@ -37,11 +37,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ragab.ahmed.educational.happenings.R;
+import com.ragab.ahmed.educational.happenings.data.models.Event;
 import com.ragab.ahmed.educational.happenings.data.models.User;
 import com.ragab.ahmed.educational.happenings.network.ApiHelper;
 import com.ragab.ahmed.educational.happenings.network.IseeApi;
 import com.ragab.ahmed.educational.happenings.network.LocationHelper;
 import com.ragab.ahmed.educational.happenings.ui.MainActivity;
+import com.ragab.ahmed.educational.happenings.ui.helpers.textwatcher.MyTextWatcher;
+import com.ragab.ahmed.educational.happenings.ui.helpers.textwatcher.Validator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -97,6 +100,8 @@ public class SubmitFragment extends Fragment {
         mDialog.setCancelable(false);
 
         eventName = (EditText) view.findViewById(R.id.event_name_txt);
+        initValidators();
+
         eventDescribtion = (EditText) view.findViewById(R.id.event_description_txt);
         isAnonymous = (CheckBox) view.findViewById(R.id.anonymously_checkbox);
 
@@ -115,7 +120,7 @@ public class SubmitFragment extends Fragment {
         categorySpinner = (Spinner) view.findViewById(R.id.category_spinner);
         typeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
 
-        String[] r = getResources().getStringArray(R.array.navigation_titles);
+        String[] r = getResources().getStringArray(R.array.category_titles);
         categorySpinner.setAdapter(new SubmitTypeAdapter(getActivity(), R.layout.spinner_list_item, r, "ic_category"));
 
         typeSpinner.setAdapter(new SubmitTypeAdapter(getActivity(), R.layout.spinner_list_item, r, "ic_type"));
@@ -134,11 +139,14 @@ public class SubmitFragment extends Fragment {
             }
         });
 
-        final LocationHelper locationHelper = new LocationHelper(getActivity(), -1);
+        final LocationHelper locationHelper = new LocationHelper(getActivity(), -1, null);
         FloatingActionButton submitFab = (FloatingActionButton) view.findViewById(R.id.submit_event_fab);
         submitFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (eventName.getError() != null)
+                    return ;
 
                 mDialog.show();
 
@@ -148,15 +156,14 @@ public class SubmitFragment extends Fragment {
 
                 final Location location = locationHelper.getCurrentLocation();
 
-                Bitmap bitmap = ((BitmapDrawable)addImageButton.getDrawable()).getBitmap();
-                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                Uri tempUri = getImageUri(mainActivity.getApplicationContext(), bitmap);
-
-                // CALL THIS METHOD TO GET THE ACTUAL PATH
-                final File finalFile = new File(getRealPathFromURI(tempUri));
-                MediaType mediaType = MediaType.parse("image/*");
-                RequestBody requestBody = RequestBody.create(mediaType, finalFile);
-                MultipartBody.Part part = MultipartBody.Part.createFormData("event_pic", finalFile.getName(), requestBody);
+                final File finalFile = selectedImage == null ? null : new File(getRealPathFromURI(selectedImage));
+                MultipartBody.Part part = null;
+                if (selectedImage != null) {
+                    // CALL THIS METHOD TO GET THE ACTUAL PATH
+                    MediaType mediaType = MediaType.parse("image/*");
+                    RequestBody requestBody = RequestBody.create(mediaType, finalFile);
+                    part = MultipartBody.Part.createFormData("event_pic", finalFile.getName(), requestBody);
+                }
                 User user = mainActivity.mUser;
 
                 mApi.submitEvent(name, description, location.getLongitude(), location.getLatitude(),
@@ -170,7 +177,8 @@ public class SubmitFragment extends Fragment {
                         {
                             Toast.makeText(getActivity(), getString(R.string.submit_event_failure), Toast.LENGTH_LONG).show();
                         }
-                        finalFile.delete();
+                        if (finalFile != null)
+                         finalFile.delete();
                         mDialog.hide();
                     }
 
@@ -225,7 +233,7 @@ public class SubmitFragment extends Fragment {
     void showImageDialog(boolean remove) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        int titlesId = (remove)? R.array.image_dialog_picker_items_extended: R.array.image_dialog_picker_items;
+        int titlesId = (remove)? R.array.image_dialog_picker_items_extended : R.array.image_dialog_picker_items;
 
         builder.setTitle(R.string.image_dialog_picker_title)
                 .setItems(titlesId, new DialogInterface.OnClickListener() {
@@ -293,5 +301,14 @@ public class SubmitFragment extends Fragment {
         return resizedBitmap;
     }
 
+    public void initValidators () {
+        String namePrompt = getString(R.string.event_name_validation);
 
+        eventName.addTextChangedListener(new MyTextWatcher(eventName, new Validator<Boolean, String>(namePrompt) {
+            @Override
+            public Boolean execute(String s) {
+                return Event.isValidName(s);
+            }
+        }));
+    }
 }

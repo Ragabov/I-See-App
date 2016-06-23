@@ -5,6 +5,19 @@
         <item>Map</item>
         <item>Happening Around</item>
         <item>Submit an event</item>
+        <item>Profile</item>
+    </string-array>
+
+    <string-array name="category_titles">
+        <item>Accident</item>
+        <item>Crime</item>
+        <item>Entertainment</item>
+        <item>Gatherings</item>
+        <item>Individuals</item>
+        <item>Services shortage</item>
+        <item>Nature</item>
+        <item>Terror acts</item>
+        <item>Traffic</item>
     </string-array>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -36,6 +49,7 @@
     <string name="name_validation">What\'s your name?</string>
     <string name="password_validation">Enter a combination of at least six numbers, letters and punctuation marks (like ! and ?).</string>
 
+    <string name="event_name_validation">Event\'s name must have at least 4 characters</string>
 
     <!-- Strings related to user sign in -->
     <string name="sign_in_progress">Signing in...</string>
@@ -49,6 +63,7 @@
     <string name="sign_up_success">Account succesfully created, sign in</string>
 
     <string name="image_dialog_picker_title">Select an image</string>
+    <string name="profile_dialog_picker_title">Select a profile picture</string>
     <string name="image_from_album">Choose photo from Album</string>
     <string name="image_from_camera">Take photo</string>
     <string name="remove_image">Remove</string>
@@ -70,6 +85,25 @@
     <string name="disconfirm_event_success">Event disconfimed successfully </string>
     <string name="disconfirm_event_failure">An error has occured, couldn\'t disconfirm event </string>
     <string name="disconfirm_event_dialog_message">Are you sure you want to disconfirm this event?</string>
+
+    <string name="loading_favorites_progress">Loading favorites...</string>
+    <string name="adding_favorites_progress">Adding location to favorites... </string>
+    <string name="deleting_favorites_progress">Deleting location from favorites...</string>
+    <string name="operation_success">Operation completed succesfully</string>
+    <string name="operation_failure">An error has occured, operation failed to complete</string>
+
+    <string name="filter_category_menu_item">Filter by category</string>
+    <string name="filter_date_menu_item">Filter by date</string>
+    <string name="filter_date_start">Select start date</string>
+    <string name="filter_date_end">Select end date</string>
+
+    <string name="around_notification_title">New events around</string>
+    <string name="around_notification_content">%1$s, You have %2$d events that awaits your revision</string>
+    <string name="around_loading_progress">Finding events around you...</string>
+
+    <string name="history_submit_format">Submitted "%1$s" event on %2$2s</string>
+    <string name="history_confirm_format">Confirmed "%1$s" event on %2$s</string>
+    <string name="history_disconfirm_format">Disconfirmed "%1$s" event on %2$s</string>
 
     <string-array name="image_dialog_picker_items">
         <item>@string/image_from_camera</item>
