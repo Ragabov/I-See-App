@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_category_filter"
+        android:title="@string/filter_category_menu_item">
+        <menu>
+            <group android:checkableBehavior="all">
+            <item android:id="@+id/red"
+                android:title="RED" />
+            <item android:id="@+id/blue"
+                android:title="BLUE" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:id="@+id/menu_date_filter"
+        android:title="@string/filter_date_menu_item">
+        <menu>
+                <item android:id="@+id/start_date_picker"
+                    android:title="@string/filter_date_start" />
+                <item android:id="@+id/end_date_picker"
+                    android:title="@string/filter_date_end" />
+        </menu>
+    </item>
+
+</menu>
