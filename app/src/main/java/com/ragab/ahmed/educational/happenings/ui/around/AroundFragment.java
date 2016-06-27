@@ -178,8 +178,38 @@ public class AroundFragment extends  Fragment implements LocationListener{
             @Override
             public void onResponse(Call<ArrayList<Event>> call, Response<ArrayList<Event>> response) {
                 aroundAdapter.clearItems();
-                aroundAdapter.addItems(response.body());
-                mDialog.hide();
+                if (response.body() != null) {
+                    aroundAdapter.addItems(response.body());
+                    ArrayList<Integer> ids = new ArrayList<Integer>();
+                    for (int i = 0 ; i < response.body().size(); i++)
+                    {
+                        ids.add(response.body().get(i).userID);
+                    }
+                    mApi.getUsers(ids).enqueue(new Callback<ArrayList<User>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+                            if (response.body() != null) {
+                                aroundAdapter.addUsersInfo(response.body());
+                                aroundAdapter.notifyDataSetChanged();
+                            }
+                            else
+                            {
+                                Toast.makeText(mainActivity, "FAAAA!", Toast.LENGTH_LONG);
+                            }
+                            mDialog.hide();
+                        }
+
+                        @Override
+                        public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                            Toast.makeText(mainActivity, "FAAAA!", Toast.LENGTH_LONG);
+                            mDialog.hide();
+                        }
+                    });
+                }
+                else
+                {
+                    mDialog.hide();
+                }
             }
 
             @Override

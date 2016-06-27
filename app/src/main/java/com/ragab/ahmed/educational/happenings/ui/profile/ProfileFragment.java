@@ -90,12 +90,13 @@ public class ProfileFragment extends Fragment {
         nameText.setText(mainActivity.mUser.fname + " " + mainActivity.mUser.lname);
         listView.setAdapter(mAdapter);
         loadHistory();
-        if (mainActivity.mUser.picPath != null)
+        if (mainActivity.mUser.profilepic != null)
         {
             Picasso.with(getActivity())
-                    .load(mainActivity.mUser.picPath)
-                    .resize(profileView.getWidth(), profileView.getHeight())
+                    .load(mainActivity.mUser.profilepic)
+                    .resize(80, 80)
                     .centerCrop()
+                    .placeholder(R.drawable.profile_placeholder)
                     .into(profileView);
         }
         return view;
@@ -166,7 +167,7 @@ public class ProfileFragment extends Fragment {
                                     .centerCrop()
                                     .into(profileView);
                             mainActivity.updateNavProfilePicture(filePath);
-                            mainActivity.mUser.picPath = filePath;
+                            mainActivity.mUser.profilepic = filePath;
                         } else {
                             Toast.makeText(mainActivity, getString(R.string.operation_failure), Toast.LENGTH_LONG);
                         }

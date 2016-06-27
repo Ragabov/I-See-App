@@ -4,6 +4,7 @@ import com.ragab.ahmed.educational.happenings.data.models.Event;
 import com.ragab.ahmed.educational.happenings.data.models.FavouriteLocation;
 import com.ragab.ahmed.educational.happenings.data.models.User;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
@@ -74,11 +75,14 @@ public interface IseeApi {
 
     @Multipart
     @POST(ApiHelper.USER_ENDPOINT + "/profile_picture")
-    Call<String> updateProfilePicture(@Part("favorite_id") long userId,@Part MultipartBody.Part image);
+    Call<String> updateProfilePicture(@Part("id") long userId,@Part MultipartBody.Part image);
 
     @FormUrlEncoded
     @POST(ApiHelper.USER_ENDPOINT + "/history")
     Call<ArrayList<Event>> getUserHistory(@Field("user_id") long userId);
 
+    @FormUrlEncoded
+    @POST(ApiHelper.USER_ENDPOINT + "/get_users")
+    Call<ArrayList<User>> getUsers(@Field("users_id") ArrayList<Integer> userIds);
 
 }

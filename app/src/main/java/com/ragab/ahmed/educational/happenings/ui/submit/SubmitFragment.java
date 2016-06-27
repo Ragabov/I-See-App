@@ -51,6 +51,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.util.Scanner;
 
 import okhttp3.MediaType;
@@ -121,15 +122,28 @@ public class SubmitFragment extends Fragment {
         typeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
 
         String[] r = getResources().getStringArray(R.array.category_titles);
-        categorySpinner.setAdapter(new SubmitTypeAdapter(getActivity(), R.layout.spinner_list_item, r, "ic_category"));
+        categorySpinner.setAdapter(new SubmitTypeAdapter(getActivity(), R.layout.spinner_list_item, r, "cat", true));
 
-        typeSpinner.setAdapter(new SubmitTypeAdapter(getActivity(), R.layout.spinner_list_item, r, "ic_type"));
+
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (pos != 0 && typeSpinner.getVisibility() != View.VISIBLE) {
-                    typeSpinner.setVisibility(View.VISIBLE);
+                if (pos != 0) {
+                    Field field = null;
+                    int id;
+                    try {
+                        field = R.array.class.getField("types_" + pos);
+                        id = field.getInt(null);
+                        String[] r = getResources().getStringArray(id);
+                        typeSpinner.setAdapter(new SubmitTypeAdapter(getActivity(), R.layout.spinner_list_item, r, "cat_"+ pos, false));
+                        typeSpinner.setVisibility(View.VISIBLE);
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                        return;
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -165,9 +179,10 @@ public class SubmitFragment extends Fragment {
                     part = MultipartBody.Part.createFormData("event_pic", finalFile.getName(), requestBody);
                 }
                 User user = mainActivity.mUser;
+                int typeId = categorySpinner.getSelectedItemPosition() * 10 + typeSpinner.getSelectedItemPosition() + 1;
 
                 mApi.submitEvent(name, description, location.getLongitude(), location.getLatitude(),
-                        typeSpinner.getSelectedItemPosition(), anonymous, user.id, part).enqueue(new Callback<ResponseBody>() {
+                        typeId, anonymous, user.id, part).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.code() == 201) {

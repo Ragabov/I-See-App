@@ -14,10 +14,12 @@ import android.widget.Toast;
 
 import com.ragab.ahmed.educational.happenings.R;
 import com.ragab.ahmed.educational.happenings.data.models.Event;
+import com.ragab.ahmed.educational.happenings.data.models.User;
 import com.ragab.ahmed.educational.happenings.network.ApiHelper;
 import com.ragab.ahmed.educational.happenings.network.IseeApi;
 import com.ragab.ahmed.educational.happenings.ui.MainActivity;
 
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
@@ -34,6 +36,7 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
 
     private ArrayList<Event> mDataset;
     IseeApi mApi;
+    private int[] iconIds = new int [150];
     private MainActivity mainActivity;
     ProgressDialog mDialog;
     // Provide a reference to the views for each data item
@@ -73,6 +76,7 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
         mDialog = new ProgressDialog(activity);
         mDialog.setIndeterminate(true);
         mDialog.setCancelable(false);
+        initializeIds();
     }
 
     // Create new views (invoked by the layout manager)
@@ -97,7 +101,7 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
         holder.descriptionTextView.setText(mDataset.get(position).description);
         holder.nameTextView.setText(mDataset.get(position).name);
         holder.timeTextView.setText(mDataset.get(position).date);
-
+        holder.iconImageView.setImageResource(iconIds[mDataset.get(position).typeID]);
         holder.showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,6 +213,39 @@ public class AroundAdapter extends RecyclerView.Adapter<AroundAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void addUsersInfo (ArrayList<User> users)
+    {
+        for (int i = 0; i < users.size(); i++)
+        {
+            User user = users.get(i);
+            for (int j = 0; j < users.size(); j++)
+            {
+                if (mDataset.get(j).id == user.id)
+                {
+                    mDataset.get(j).userName = user.fname + " " + user.lname;
+                }
+                break;
+            }
+        }
+    }
+
+    public void initializeIds()
+    {
+        String name = "";
+        for (int i = 0 ; i < 100 ; i++) {
+            name = "cat_"+i/10+"_"+i%10;
+            final Field field;
+            try {
+                field = R.mipmap.class.getField(name);
+                int id = field.getInt(null);
+                iconIds[i] = id;
+            } catch (NoSuchFieldException e) {
+
+            } catch (IllegalAccessException e) {
+
+            }
+        }
+    }
     public void clearItems ()
     {
         mDataset.clear();;

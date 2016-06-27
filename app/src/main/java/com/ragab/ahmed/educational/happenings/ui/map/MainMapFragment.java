@@ -64,6 +64,7 @@ public class MainMapFragment extends SupportMapFragment implements OnMapReadyCal
     private ClusterManager<Event> mClusterManager;
     private IseeApi mApi;
 
+    public int categoryId = 0;
     public  boolean isStartDate = true;
     public Long startDate, endDate;
 
@@ -109,13 +110,8 @@ public class MainMapFragment extends SupportMapFragment implements OnMapReadyCal
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.red:
-            case R.id.blue:
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                return true;
 
+        switch (item.getItemId()) {
             case R.id.start_date_picker:
                 isStartDate = true;
                 DialogFragment newFragment1 = new DatePickerFragment();
@@ -129,7 +125,22 @@ public class MainMapFragment extends SupportMapFragment implements OnMapReadyCal
                 return true;
 
             default:
-                return super.onOptionsItemSelected(item);
+                if (!item.isCheckable())
+                    return super.onOptionsItemSelected(item);
+
+                if (item.isChecked()) item.setChecked(false);
+                else item.setChecked(true);
+
+                char lIndex = item.getNumericShortcut();
+                if (Character.isDigit(lIndex))
+                {
+                    categoryId = Short.parseShort(Character.toString(lIndex));
+                }
+                else {
+                    categoryId = 0;
+                }
+                loadEvents(currentBounds);
+                return true;
         }
     }
 
@@ -220,7 +231,7 @@ public class MainMapFragment extends SupportMapFragment implements OnMapReadyCal
             currentZoom = cameraPosition.zoom;
             if (!bounds.equals(currentBounds)){
                 mApi.getEvents(bounds.southwest.latitude, bounds.southwest.longitude, bounds.northeast.latitude, bounds.northeast.longitude,
-                        startDate, endDate, null).enqueue(this);
+                        startDate, endDate, categoryId).enqueue(this);
             }
             currentBounds = bounds;
             mClusterManager.onCameraChange(cameraPosition);
@@ -231,7 +242,7 @@ public class MainMapFragment extends SupportMapFragment implements OnMapReadyCal
     public void loadEvents (LatLngBounds bounds)
     {
         mApi.getEvents(bounds.southwest.latitude, bounds.southwest.longitude, bounds.northeast.latitude, bounds.northeast.longitude,
-                startDate, endDate, null).enqueue(this);
+                startDate, endDate, categoryId).enqueue(this);
     }
 
     @Override

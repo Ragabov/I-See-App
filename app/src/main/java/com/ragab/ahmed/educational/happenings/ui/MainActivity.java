@@ -2,6 +2,7 @@ package com.ragab.ahmed.educational.happenings.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -39,6 +40,7 @@ public class MainActivity extends ActionBarActivity
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         DateReciever{
 
+    SharedPreferences sharedPreferences;
     /*
     Request codes
      */
@@ -149,7 +151,7 @@ Storing the around fragment so as not to make a new instance each time
     @Override
     protected void onResume() {
         super.onResume();
-        if (mUser == null)
+        if (mUser != null)
         {
             Intent intent = new Intent();
             intent.setClass(this.getApplicationContext(), LoginActivity.class);
@@ -276,6 +278,14 @@ Storing the around fragment so as not to make a new instance each time
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (id == R.id.menu_logout)
+        {
+            sharedPreferences = getSharedPreferences(LoginActivity.LOGIN_FILE, MODE_PRIVATE);
+            sharedPreferences.edit().remove(LoginActivity.USER_PASSWORD_KEY).remove(LoginActivity.USER_NAME_EMAIL).commit();
+            mUser = null;
+            finish();
+            startActivity(getIntent());
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -317,10 +327,10 @@ Storing the around fragment so as not to make a new instance each time
                     mUser = (User)data.getSerializableExtra(LoginActivity.USER_ARG);
                     if (mUser == null)
                         break;
-                    if (mUser.picPath != null)
-                        mUser.picPath = ApiHelper.BASE_IMAGE_URL + mUser.picPath;
+                    if (mUser.profilepic != null)
+                        mUser.profilepic = ApiHelper.BASE_IMAGE_URL + mUser.profilepic;
                     mNavigationDrawerFragment.setUser(mUser);
-                    mNavigationDrawerFragment.updateProfilePicture(mUser.picPath);
+                    mNavigationDrawerFragment.updateProfilePicture(mUser.profilepic);
                     favouritesFragment.loadFavorites();
                     break;
                 default:

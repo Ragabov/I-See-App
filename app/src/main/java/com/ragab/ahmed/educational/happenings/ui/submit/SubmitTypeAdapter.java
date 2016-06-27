@@ -22,12 +22,14 @@ public class SubmitTypeAdapter extends ArrayAdapter<String> {
     String baseName;
     LayoutInflater mLayLayoutInflater;
     int mResource;
+    boolean isCategory;
 
-    public SubmitTypeAdapter(Context context, int resource, String[] objects, String baseName) {
+    public SubmitTypeAdapter(Context context, int resource, String[] objects, String baseName, boolean isCategory) {
         super(context, resource, objects);
         mLayLayoutInflater = LayoutInflater.from(context);
         this.baseName = baseName + "_";
         this.mResource = resource;
+        this.isCategory = isCategory;
     }
 
     @Override
@@ -49,11 +51,15 @@ public class SubmitTypeAdapter extends ArrayAdapter<String> {
         ViewHolder holder = (ViewHolder)convertView.getTag();
         holder.text.setText(getItem(position));
 
-        String name = baseName + position;
+        String name = "";
+        if (isCategory)
+             name = baseName + position + "_1" ;
+        else
+            name = baseName + (position+1);
 
         final Field field;
         try {
-            field = R.drawable.class.getField(name);
+            field = R.mipmap.class.getField(name);
             int id = field.getInt(null);
             holder.icon.setImageResource(id);
         } catch (NoSuchFieldException e) {

@@ -16,7 +16,7 @@ public class User implements Serializable{
     public String email;
     public String password;
     public long point;
-    public String picPath;
+    public String profilepic;
     public String rankId;
 
 

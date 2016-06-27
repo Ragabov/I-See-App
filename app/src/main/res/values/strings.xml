@@ -8,16 +8,89 @@
         <item>Profile</item>
     </string-array>
 
+    <string name="category_1">Accident</string>
+    <string name="category_2">Crime</string>
+    <string name="category_3">Entertainment</string>
+    <string name="category_4">Gatherings</string>
+    <string name="category_5">Individuals</string>
+    <string name="category_6">Services shortage</string>
+    <string name="category_7">Nature</string>
+    <string name="category_8">Terror acts</string>
+    <string name="category_9">Traffic</string>
+
+    <string name="all">All</string>
+
     <string-array name="category_titles">
+        <item>Choose a category</item>
+        <item>@string/category_1</item>
+        <item>@string/category_2</item>
+        <item>@string/category_3</item>
+        <item>@string/category_4</item>
+        <item>@string/category_5</item>
+        <item>@string/category_6</item>
+        <item>@string/category_7</item>
+        <item>@string/category_8</item>
+        <item>@string/category_9</item>
+    </string-array>
+
+    <string-array name="types_1">
+        <item>Fire</item>
+        <item>Car collision</item>
+        <item>Drowning</item>
+        <item>Car Crash</item>
         <item>Accident</item>
-        <item>Crime</item>
-        <item>Entertainment</item>
-        <item>Gatherings</item>
-        <item>Individuals</item>
-        <item>Services shortage</item>
-        <item>Nature</item>
-        <item>Terror acts</item>
-        <item>Traffic</item>
+    </string-array>
+
+    <string-array name="types_2">
+        <item>Illegal behavior</item>
+        <item>Theft</item>
+        <item>Armed Assault</item>
+        <item>Suicide</item>
+        <item>Murder</item>
+        <item>Sexual Harassment</item>
+    </string-array>
+    <string-array name="types_3">
+        <item>Sports</item>
+        <item>Arts</item>
+    </string-array>
+    <string-array name="types_4">
+        <item>Convention</item>
+        <item>Riot</item>
+        <item>Graduation Party</item>
+        <item>Festival</item>
+        <item>Religious event</item>
+        <item>Social Gathering</item>
+    </string-array>
+    <string-array name="types_5">
+        <item>Celebrity</item>
+        <item>Job vacancy</item>
+        <item>Missing Person</item>
+    </string-array>
+    <string-array name="types_6">
+        <item>Water shortage</item>
+        <item>Electricity shortage</item>
+        <item>Lack of Sanitation services</item>
+        <item>Lack of cleaning services</item>
+        <item>Dangerous animals</item>
+        <item>Weak cell phone signal</item>
+    </string-array>
+    <string-array name="types_7">
+        <item>Unusual weather</item>
+        <item>Tornado</item>
+        <item>Snow</item>
+        <item>Clouds</item>
+        <item>Lightning</item>
+        <item>Floods</item>
+        <item>Earthquake</item>
+    </string-array>
+    <string-array name="types_8">
+        <item>Terror act</item>
+        <item>Bombings</item>
+        <item>Shooting</item>
+    </string-array>
+    <string-array name="types_9">
+        <item>Traffic jam</item>
+        <item>Road closed</item>
     </string-array>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -25,7 +98,7 @@
 
     <string name="action_example">Example action</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
 
     <string name="current_location_text">Current Location</string>
 

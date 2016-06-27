@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.ragab.ahmed.educational.happenings.R;
 import com.ragab.ahmed.educational.happenings.data.models.User;
+import com.ragab.ahmed.educational.happenings.network.ApiHelper;
+import com.ragab.ahmed.educational.happenings.ui.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -68,6 +70,8 @@ public class NavigationDrawerFragment extends Fragment {
     private TextView userNameText;
     private TextView userEmailText;
 
+    private MainActivity mainActivity;
+
     public NavigationDrawerFragment() {
     }
 
@@ -96,6 +100,7 @@ public class NavigationDrawerFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,7 +117,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setAdapter(new NavigationListViewAdapter(getActivity()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
-        profileImage = (CircleImageView) view.findViewById(R.id.user_profile_photo);
+        profileImage = (CircleImageView) view.findViewById(R.id.nav_profile_pic);
         userNameText = (TextView)view.findViewById(R.id.user_name_text);
         userEmailText = (TextView)view.findViewById(R.id.user_email_text);
 
@@ -164,6 +169,10 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
+                if (mainActivity != null && mainActivity.mUser != null)
+                    updateProfilePicture(mainActivity.mUser.profilepic);
+
                 if (!isAdded()) {
                     return;
                 }
@@ -214,6 +223,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mainActivity = (MainActivity) activity;
         try {
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
@@ -293,9 +303,10 @@ public class NavigationDrawerFragment extends Fragment {
     public void updateProfilePicture (String filePath)
     {
         imagePath = filePath;
-        if (profileImage != null && filePath != null)
-        Picasso.with(getActivity())
+        if (profileImage != null && filePath != null && profileImage.getWidth() > 1)
+        Picasso.with(mainActivity)
                 .load(filePath)
+                .placeholder(R.drawable.profile_placeholder)
                 .resize(profileImage.getWidth(), profileImage.getHeight())
                 .centerCrop()
                 .into(profileImage);

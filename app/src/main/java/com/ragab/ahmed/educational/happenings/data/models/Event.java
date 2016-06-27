@@ -16,11 +16,11 @@ public class Event implements ClusterItem {
     public String name;
     public String description;
     public String date;
-    public int userId;
+    public int userID;
     public double longitude;
     public double lattitude;
     public String pic_path;
-    public int type_id;
+    public int typeID;
     public boolean anonymous;
     public String userName;
     public int status;

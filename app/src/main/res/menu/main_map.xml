@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/menu_category_filter"
         android:title="@string/filter_category_menu_item">
         <menu>
-            <group android:checkableBehavior="all">
-            <item android:id="@+id/red"
-                android:title="RED" />
-            <item android:id="@+id/blue"
-                android:title="BLUE" />
+            <group android:checkableBehavior="single">
+            <item android:id="@+id/all_category_item"
+                android:checked="true"
+                android:numericShortcut="0"
+                android:title="@string/all"/>
+            <item
+                android:numericShortcut="1"
+                android:title="@string/category_1" />
+            <item
+                android:numericShortcut="2"
+                android:title="@string/category_2" />
+            <item
+                android:numericShortcut="3"
+                android:title="@string/category_3" />
+            <item
+                android:numericShortcut="4"
+                android:title="@string/category_4" />
+            <item
+                android:numericShortcut="5"
+                android:title="@string/category_5" />
+            <item
+                android:numericShortcut="6"
+                android:title="@string/category_6" />
+            <item
+                android:numericShortcut="7"
+                android:title="@string/category_7" />
+            <item
+                android:numericShortcut="8"
+                android:title="@string/category_8" />
+            <item
+                android:numericShortcut="9"
+                android:title="@string/category_9" />
             </group>
         </menu>
     </item>
